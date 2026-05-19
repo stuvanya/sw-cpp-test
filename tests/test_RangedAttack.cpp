@@ -4,6 +4,9 @@
 #include <Core/MarchState.hpp>
 #include <Core/Unit.hpp>
 #include <Features/Actions/RangedAttackAction.hpp>
+#include <IO/Events/UnitAttacked.hpp>
+#include <IO/Events/UnitDied.hpp>
+#include <IO/Events/UnitMoved.hpp>
 
 using namespace sw;
 using namespace sw::test;
@@ -28,7 +31,7 @@ TEST(RangedAttack_ranged_shot_when_no_adjacent_enemies_and_target_in_range)
 	action.execute(*hunter, f.ctx);
 
 	CHECK_EQ(target->hp, int32_t(42));	// 50 - 8 (agility)
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(RangedAttack_melee_strike_when_adjacent_enemy_present)
@@ -45,7 +48,7 @@ TEST(RangedAttack_melee_strike_when_adjacent_enemy_present)
 	action.execute(*hunter, f.ctx);
 
 	CHECK_EQ(adj->hp, int32_t(45));	 // 50 - 5 (strength)
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(RangedAttack_adjacent_enemy_takes_priority_over_ranged_target)
@@ -82,7 +85,7 @@ TEST(RangedAttack_target_beyond_range_is_ignored)
 	action.execute(*hunter, f.ctx);
 
 	CHECK_EQ(target->hp, int32_t(50));
-	CHECK(!f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(!f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(RangedAttack_moves_when_no_targets_in_range_and_march_set)
@@ -99,8 +102,8 @@ TEST(RangedAttack_moves_when_no_targets_in_range_and_march_set)
 	auto action = makeHunterAction(ms);
 	action.execute(*hunter, f.ctx);
 
-	CHECK(f.eventLog.hasEvent("UNIT_MOVED"));
-	CHECK(!f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitMoved>());
+	CHECK(!f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(RangedAttack_canAct_true_when_enemy_in_range)
@@ -139,5 +142,5 @@ TEST(RangedAttack_logs_UNIT_DIED_when_ranged_shot_kills_target)
 	action.execute(*hunter, f.ctx);
 
 	CHECK(!target->isAlive());
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 }

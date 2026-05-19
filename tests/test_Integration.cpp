@@ -5,6 +5,9 @@
 #include <Core/TurnManager.hpp>
 #include <Features/Units/HunterUnit.hpp>
 #include <Features/Units/SwordsmanUnit.hpp>
+#include <IO/Events/UnitAttacked.hpp>
+#include <IO/Events/UnitDied.hpp>
+#include <IO/Events/UnitMoved.hpp>
 
 using namespace sw;
 using namespace sw::test;
@@ -26,8 +29,8 @@ TEST(Integration_swordsman_kills_adjacent_swordsman_in_one_hit)
 	TurnManager(f.ctx).run();
 
 	CHECK_EQ(f.units.aliveCount(), std::size_t(1));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 	CHECK(f.ctx.tick >= uint64_t(1));
 }
 
@@ -52,8 +55,8 @@ TEST(Integration_hunter_fires_ranged_shot_at_distant_enemy)
 	TurnManager(f.ctx).run();
 
 	CHECK_EQ(f.units.aliveCount(), std::size_t(1));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 }
 
 // ---------------------------------------------------------------------------
@@ -83,8 +86,8 @@ TEST(Integration_swordsman_marches_to_enemy_and_attacks)
 	TurnManager(f.ctx).run();
 
 	// s1 should have moved and eventually killed s2
-	CHECK(f.eventLog.hasEvent("UNIT_MOVED"));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitMoved>());
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
 	CHECK_EQ(f.units.aliveCount(), std::size_t(1));
 }
 
@@ -109,6 +112,6 @@ TEST(Integration_hunter_uses_melee_when_enemy_is_adjacent)
 	TurnManager(f.ctx).run();
 
 	CHECK_EQ(f.units.aliveCount(), std::size_t(1));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 }

@@ -4,6 +4,9 @@
 #include <Core/MarchState.hpp>
 #include <Core/Unit.hpp>
 #include <Features/Actions/MeleeAttackAction.hpp>
+#include <IO/Events/UnitAttacked.hpp>
+#include <IO/Events/UnitDied.hpp>
+#include <IO/Events/UnitMoved.hpp>
 
 using namespace sw;
 using namespace sw::test;
@@ -22,7 +25,7 @@ TEST(MeleeAttack_attacks_adjacent_enemy_and_reduces_HP)
 	action.execute(*attacker, f.ctx);
 
 	CHECK_EQ(target->hp, int32_t(40));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(MeleeAttack_logs_UNIT_DIED_when_target_HP_drops_to_zero)
@@ -39,7 +42,7 @@ TEST(MeleeAttack_logs_UNIT_DIED_when_target_HP_drops_to_zero)
 	action.execute(*attacker, f.ctx);
 
 	CHECK(!target->isAlive());
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 }
 
 TEST(MeleeAttack_does_not_attack_non_targetable_unit)
@@ -57,7 +60,7 @@ TEST(MeleeAttack_does_not_attack_non_targetable_unit)
 	action.execute(*attacker, f.ctx);
 
 	CHECK_EQ(target->hp, int32_t(50));
-	CHECK(!f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(!f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(MeleeAttack_moves_toward_march_target_when_no_adjacent_enemies)
@@ -74,8 +77,8 @@ TEST(MeleeAttack_moves_toward_march_target_when_no_adjacent_enemies)
 	MeleeAttackAction action(10, ms);
 	action.execute(*attacker, f.ctx);
 
-	CHECK(f.eventLog.hasEvent("UNIT_MOVED"));
-	CHECK(!f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitMoved>());
+	CHECK(!f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(MeleeAttack_canAct_true_when_adjacent_enemy_exists)

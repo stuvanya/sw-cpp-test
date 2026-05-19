@@ -4,6 +4,8 @@
 #include <Core/MarchState.hpp>
 #include <Core/Unit.hpp>
 #include <Features/Actions/MoveAction.hpp>
+#include <IO/Events/MarchEnded.hpp>
+#include <IO/Events/UnitMoved.hpp>
 
 using namespace sw;
 using namespace sw::test;
@@ -70,7 +72,7 @@ TEST(MoveAction_unit_moves_one_step_closer_to_target)
 
 	CHECK_EQ(unit->x, uint32_t(1));
 	CHECK_EQ(unit->y, uint32_t(0));
-	CHECK(f.eventLog.hasEvent("UNIT_MOVED"));
+	CHECK(f.eventLog.hasEvent<io::UnitMoved>());
 }
 
 TEST(MoveAction_reaching_target_logs_MARCH_ENDED_and_clears_hasTarget)
@@ -91,7 +93,7 @@ TEST(MoveAction_reaching_target_logs_MARCH_ENDED_and_clears_hasTarget)
 	CHECK_EQ(unit->x, uint32_t(1));
 	CHECK_EQ(unit->y, uint32_t(0));
 	CHECK(!marchState->hasTarget);
-	CHECK(f.eventLog.hasEvent("MARCH_ENDED"));
+	CHECK(f.eventLog.hasEvent<io::MarchEnded>());
 }
 
 TEST(MoveAction_blocked_unit_does_not_move_and_keeps_target)
@@ -123,5 +125,5 @@ TEST(MoveAction_blocked_unit_does_not_move_and_keeps_target)
 	CHECK_EQ(unit->x, uint32_t(1));
 	CHECK_EQ(unit->y, uint32_t(1));
 	CHECK(marchState->hasTarget);
-	CHECK(!f.eventLog.hasEvent("UNIT_MOVED"));
+	CHECK(!f.eventLog.hasEvent<io::UnitMoved>());
 }

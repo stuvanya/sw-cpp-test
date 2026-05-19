@@ -3,6 +3,8 @@
 
 #include <Core/TurnManager.hpp>
 #include <Features/Units/SwordsmanUnit.hpp>
+#include <IO/Events/UnitAttacked.hpp>
+#include <IO/Events/UnitDied.hpp>
 
 using namespace sw;
 using namespace sw::test;
@@ -59,7 +61,7 @@ TEST(TurnManager_advances_tick_when_units_can_act)
 	tm.run();
 
 	CHECK(f.ctx.tick >= uint64_t(1));
-	CHECK(f.eventLog.hasEvent("UNIT_ATTACKED"));
+	CHECK(f.eventLog.hasEvent<io::UnitAttacked>());
 }
 
 TEST(TurnManager_removes_dead_units_between_turns)
@@ -76,5 +78,5 @@ TEST(TurnManager_removes_dead_units_between_turns)
 	tm.run();
 
 	CHECK_EQ(f.units.aliveCount(), std::size_t(1));
-	CHECK(f.eventLog.hasEvent("UNIT_DIED"));
+	CHECK(f.eventLog.hasEvent<io::UnitDied>());
 }

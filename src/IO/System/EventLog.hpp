@@ -64,10 +64,22 @@ namespace sw
 			return std::any_of(_captured.begin(), _captured.end(), [&](const Entry& e) { return e.name == name; });
 		}
 
+		template <class TEvent>
+		bool hasEvent() const
+		{
+			return hasEvent(std::string(TEvent::Name));
+		}
+
 		std::size_t countEvents(const std::string& name) const
 		{
 			return static_cast<std::size_t>(
 				std::count_if(_captured.begin(), _captured.end(), [&](const Entry& e) { return e.name == name; }));
+		}
+
+		template <class TEvent>
+		std::size_t countEvents() const
+		{
+			return countEvents(std::string(TEvent::Name));
 		}
 
 		std::string lastEventName() const
