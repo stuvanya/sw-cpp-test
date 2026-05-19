@@ -2,7 +2,6 @@
 
 #include <Core/IAction.hpp>
 #include <Core/MarchState.hpp>
-
 #include <memory>
 
 namespace sw

@@ -21,8 +21,8 @@ namespace sw
 	public:
 		// out == nullptr  → silent mode (no output, only capture)
 		// out == &std::cout (default) → production mode
-		explicit EventLog(std::ostream* out = &std::cout)
-			: _out(out)
+		explicit EventLog(std::ostream* out = &std::cout) :
+				_out(out)
 		{}
 
 		template <class TEvent>
@@ -41,29 +41,33 @@ namespace sw
 			}
 		}
 
-		uint64_t totalEvents() const { return _totalEvents; }
+		uint64_t totalEvents() const
+		{
+			return _totalEvents;
+		}
 
 		// --- Test helpers ---
 
 		struct Entry
 		{
-			uint64_t    tick;
+			uint64_t tick;
 			std::string name;
 		};
 
-		const std::vector<Entry>& captured() const { return _captured; }
+		const std::vector<Entry>& captured() const
+		{
+			return _captured;
+		}
 
 		bool hasEvent(const std::string& name) const
 		{
-			return std::any_of(_captured.begin(), _captured.end(),
-				[&](const Entry& e) { return e.name == name; });
+			return std::any_of(_captured.begin(), _captured.end(), [&](const Entry& e) { return e.name == name; });
 		}
 
 		std::size_t countEvents(const std::string& name) const
 		{
 			return static_cast<std::size_t>(
-				std::count_if(_captured.begin(), _captured.end(),
-					[&](const Entry& e) { return e.name == name; }));
+				std::count_if(_captured.begin(), _captured.end(), [&](const Entry& e) { return e.name == name; }));
 		}
 
 		std::string lastEventName() const
@@ -71,11 +75,14 @@ namespace sw
 			return _captured.empty() ? "" : _captured.back().name;
 		}
 
-		void clearCaptured() { _captured.clear(); }
+		void clearCaptured()
+		{
+			_captured.clear();
+		}
 
 	private:
-		std::ostream*      _out;
-		uint64_t           _totalEvents{0};
+		std::ostream* _out;
+		uint64_t _totalEvents{0};
 		std::vector<Entry> _captured;
 	};
 }

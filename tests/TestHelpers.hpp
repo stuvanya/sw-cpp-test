@@ -8,7 +8,6 @@
 #include <Core/Map.hpp>
 #include <Core/UnitStorage.hpp>
 #include <IO/System/EventLog.hpp>
-
 #include <memory>
 
 namespace sw::test
@@ -18,16 +17,16 @@ namespace sw::test
 	// produce no stdout noise, but events are still captured in eventLog.captured().
 	struct GameFixture
 	{
-		Map         map;
+		Map map;
 		UnitStorage units;
-		EventLog    eventLog{nullptr};   // silent: no stdout, captures events
+		EventLog eventLog{nullptr};	 // silent: no stdout, captures events
 		GameContext ctx;
 
-		explicit GameFixture(uint32_t w = 10, uint32_t h = 10)
-			: map(w, h)
-			, ctx{map, units, eventLog}
+		explicit GameFixture(uint32_t w = 10, uint32_t h = 10) :
+				map(w, h),
+				ctx{map, units, eventLog}
 		{
 			ctx.rng.seed(0);  // deterministic RNG for reproducible tests
 		}
 	};
-} // namespace sw::test
+}  // namespace sw::test

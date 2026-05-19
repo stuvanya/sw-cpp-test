@@ -35,12 +35,21 @@ namespace sw::test
 
 	struct Registration
 	{
-		std::string                      name;
-		std::function<TestBase*()>       factory;
+		std::string name;
+		std::function<TestBase*()> factory;
 	};
 
-	inline int& failCount()  { static int n = 0; return n; }
-	inline int& checkCount() { static int n = 0; return n; }
+	inline int& failCount()
+	{
+		static int n = 0;
+		return n;
+	}
+
+	inline int& checkCount()
+	{
+		static int n = 0;
+		return n;
+	}
 
 	inline std::vector<Registration>& registry()
 	{
@@ -87,24 +96,20 @@ namespace sw::test
 			}
 		}
 
-		std::printf("\n%d passed, %d failed (%d checks total)\n",
-		            passed, failed, checkCount());
+		std::printf("\n%d passed, %d failed (%d checks total)\n", passed, failed, checkCount());
 		return failed > 0 ? 1 : 0;
 	}
-} // namespace sw::test
+}  // namespace sw::test
 
 // ---------------------------------------------------------------------------
 // Assertion macros
 // ---------------------------------------------------------------------------
 
-#define CHECK(expr) \
-	sw::test::checkImpl(static_cast<bool>(expr), #expr, __FILE__, __LINE__)
+#define CHECK(expr) sw::test::checkImpl(static_cast<bool>(expr), #expr, __FILE__, __LINE__)
 
-#define CHECK_EQ(a, b) \
-	sw::test::checkImpl((a) == (b), #a " == " #b, __FILE__, __LINE__)
+#define CHECK_EQ(a, b) sw::test::checkImpl((a) == (b), #a " == " #b, __FILE__, __LINE__)
 
-#define CHECK_NE(a, b) \
-	sw::test::checkImpl((a) != (b), #a " != " #b, __FILE__, __LINE__)
+#define CHECK_NE(a, b) sw::test::checkImpl((a) != (b), #a " != " #b, __FILE__, __LINE__)
 
 // ---------------------------------------------------------------------------
 // TEST(Name) macro — GTest-style, no END_TEST needed.
@@ -122,18 +127,19 @@ namespace sw::test
 // ---------------------------------------------------------------------------
 
 #define SW_TEST_CONCAT_(a, b) a##b
-#define SW_TEST_CONCAT(a, b)  SW_TEST_CONCAT_(a, b)
-#define SW_TEST_CLASS(name)   SW_TEST_CONCAT(_SwTest_, name)
+#define SW_TEST_CONCAT(a, b) SW_TEST_CONCAT_(a, b)
+#define SW_TEST_CLASS(name) SW_TEST_CONCAT(_SwTest_, name)
 
-#define TEST(name)                                                              \
-	struct SW_TEST_CLASS(name) : sw::test::TestBase                             \
-	{                                                                           \
-		void TestBody() override;                                               \
-		static sw::test::TestBase* _factory()                                   \
-		{                                                                       \
-			return new SW_TEST_CLASS(name);                                     \
-		}                                                                       \
-	};                                                                          \
-	static const bool SW_TEST_CONCAT(_sw_reg_, name) =                         \
-		(sw::test::registerTest(#name, SW_TEST_CLASS(name)::_factory), true);   \
+#define TEST(name)                                                                                                     \
+	struct SW_TEST_CLASS(name) :                                                                                       \
+			sw::test::TestBase                                                                                         \
+	{                                                                                                                  \
+		void TestBody() override;                                                                                      \
+		static sw::test::TestBase* _factory()                                                                          \
+		{                                                                                                              \
+			return new SW_TEST_CLASS(name);                                                                            \
+		}                                                                                                              \
+	};                                                                                                                 \
+	static const bool SW_TEST_CONCAT(_sw_reg_, name)                                                                   \
+		= (sw::test::registerTest(#name, SW_TEST_CLASS(name)::_factory), true);                                        \
 	void SW_TEST_CLASS(name)::TestBody()

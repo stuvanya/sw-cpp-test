@@ -2,7 +2,6 @@
 
 #include <Core/IAction.hpp>
 #include <Core/MarchState.hpp>
-
 #include <cstdint>
 #include <memory>
 
@@ -19,7 +18,7 @@ namespace sw
 		bool canAct(const Unit& self, const GameContext& ctx) const override;
 
 	private:
-		uint32_t                    _strength;
+		uint32_t _strength;
 		std::shared_ptr<MarchState> _movable;
 	};
 }

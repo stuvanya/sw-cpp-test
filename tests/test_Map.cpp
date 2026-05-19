@@ -1,4 +1,5 @@
 #include "TestRunner.hpp"
+
 #include <Core/Map.hpp>
 
 using namespace sw;
@@ -38,12 +39,16 @@ TEST(Map_free_unmarks_occupied_cell)
 TEST(Map_getFreeNeighbors_excludes_occupied_cells)
 {
 	Map m(5, 5);
-	m.occupy(0, 0); m.occupy(1, 0); m.occupy(2, 0);
-	m.occupy(0, 1);                  m.occupy(2, 1);
-	m.occupy(0, 2); m.occupy(1, 2);
+	m.occupy(0, 0);
+	m.occupy(1, 0);
+	m.occupy(2, 0);
+	m.occupy(0, 1);
+	m.occupy(2, 1);
+	m.occupy(0, 2);
+	m.occupy(1, 2);
 	auto neighbors = m.getFreeNeighbors(1, 1);
 	CHECK_EQ(neighbors.size(), std::size_t(1));
-	CHECK_EQ(neighbors[0].first,  uint32_t(2));
+	CHECK_EQ(neighbors[0].first, uint32_t(2));
 	CHECK_EQ(neighbors[0].second, uint32_t(2));
 }
 
@@ -59,9 +64,15 @@ TEST(Map_getFreeNeighbors_empty_when_all_neighbors_occupied)
 {
 	Map m(3, 3);
 	for (int x = 0; x < 3; ++x)
+	{
 		for (int y = 0; y < 3; ++y)
+		{
 			if (!(x == 1 && y == 1))
+			{
 				m.occupy(x, y);
+			}
+		}
+	}
 	auto neighbors = m.getFreeNeighbors(1, 1);
 	CHECK(neighbors.empty());
 }

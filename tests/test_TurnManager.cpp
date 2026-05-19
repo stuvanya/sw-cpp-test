@@ -1,5 +1,5 @@
-#include "TestRunner.hpp"
 #include "TestHelpers.hpp"
+#include "TestRunner.hpp"
 
 #include <Core/TurnManager.hpp>
 #include <Features/Units/SwordsmanUnit.hpp>
@@ -32,7 +32,7 @@ TEST(TurnManager_stops_when_no_unit_can_act)
 {
 	GameFixture f(20, 20);
 	// Two swordsmen far apart with no march targets — neither can act
-	auto s1 = makeSwordsman(1, 0,  0,  100, 10);
+	auto s1 = makeSwordsman(1, 0, 0, 100, 10);
 	auto s2 = makeSwordsman(2, 19, 19, 100, 10);
 	f.units.add(s1);
 	f.units.add(s2);
@@ -66,7 +66,7 @@ TEST(TurnManager_removes_dead_units_between_turns)
 {
 	GameFixture f;
 	auto s1 = makeSwordsman(1, 0, 0, 100, 50);
-	auto s2 = makeSwordsman(2, 1, 0, 10,  50);
+	auto s2 = makeSwordsman(2, 1, 0, 10, 50);
 	f.units.add(s1);
 	f.units.add(s2);
 	f.map.occupy(0, 0);

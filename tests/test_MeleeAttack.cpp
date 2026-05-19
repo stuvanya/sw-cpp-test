@@ -1,5 +1,5 @@
-#include "TestRunner.hpp"
 #include "TestHelpers.hpp"
+#include "TestRunner.hpp"
 
 #include <Core/MarchState.hpp>
 #include <Core/Unit.hpp>
@@ -12,7 +12,7 @@ TEST(MeleeAttack_attacks_adjacent_enemy_and_reduces_HP)
 {
 	GameFixture f;
 	auto attacker = std::make_shared<Unit>(1, 0, 0, 100);
-	auto target   = std::make_shared<Unit>(2, 1, 0, 50);
+	auto target = std::make_shared<Unit>(2, 1, 0, 50);
 	f.units.add(attacker);
 	f.units.add(target);
 	f.map.occupy(0, 0);
@@ -29,7 +29,7 @@ TEST(MeleeAttack_logs_UNIT_DIED_when_target_HP_drops_to_zero)
 {
 	GameFixture f;
 	auto attacker = std::make_shared<Unit>(1, 0, 0, 100);
-	auto target   = std::make_shared<Unit>(2, 1, 0, 5);
+	auto target = std::make_shared<Unit>(2, 1, 0, 5);
 	f.units.add(attacker);
 	f.units.add(target);
 	f.map.occupy(0, 0);
@@ -46,7 +46,7 @@ TEST(MeleeAttack_does_not_attack_non_targetable_unit)
 {
 	GameFixture f;
 	auto attacker = std::make_shared<Unit>(1, 0, 0, 100);
-	auto target   = std::make_shared<Unit>(2, 1, 0, 50);
+	auto target = std::make_shared<Unit>(2, 1, 0, 50);
 	target->targetable = false;
 	f.units.add(attacker);
 	f.units.add(target);
@@ -69,8 +69,8 @@ TEST(MeleeAttack_moves_toward_march_target_when_no_adjacent_enemies)
 
 	auto ms = std::make_shared<MarchState>();
 	ms->hasTarget = true;
-	ms->targetX   = 5;
-	ms->targetY   = 0;
+	ms->targetX = 5;
+	ms->targetY = 0;
 	MeleeAttackAction action(10, ms);
 	action.execute(*attacker, f.ctx);
 
@@ -82,7 +82,7 @@ TEST(MeleeAttack_canAct_true_when_adjacent_enemy_exists)
 {
 	GameFixture f;
 	auto attacker = std::make_shared<Unit>(1, 0, 0, 100);
-	auto enemy    = std::make_shared<Unit>(2, 1, 0, 50);
+	auto enemy = std::make_shared<Unit>(2, 1, 0, 50);
 	f.units.add(attacker);
 	f.units.add(enemy);
 
@@ -108,8 +108,8 @@ TEST(MeleeAttack_canAct_true_when_march_target_set)
 
 	auto ms = std::make_shared<MarchState>();
 	ms->hasTarget = true;
-	ms->targetX   = 5;
-	ms->targetY   = 5;
+	ms->targetX = 5;
+	ms->targetY = 5;
 	MeleeAttackAction action(10, ms);
 	CHECK(action.canAct(*attacker, f.ctx));
 }

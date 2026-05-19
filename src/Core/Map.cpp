@@ -4,8 +4,9 @@
 
 namespace sw
 {
-	Map::Map(uint32_t width, uint32_t height)
-		: _width(width), _height(height)
+	Map::Map(uint32_t width, uint32_t height) :
+			_width(width),
+			_height(height)
 	{}
 
 	bool Map::isInBounds(uint32_t x, uint32_t y) const
@@ -38,14 +39,18 @@ namespace sw
 			for (int dy = -1; dy <= 1; ++dy)
 			{
 				if (dx == 0 && dy == 0)
+				{
 					continue;
+				}
 
 				// Use signed arithmetic to avoid underflow on uint32_t
 				int nx = static_cast<int>(x) + dx;
 				int ny = static_cast<int>(y) + dy;
 
 				if (nx < 0 || ny < 0)
+				{
 					continue;
+				}
 
 				uint32_t ux = static_cast<uint32_t>(nx);
 				uint32_t uy = static_cast<uint32_t>(ny);

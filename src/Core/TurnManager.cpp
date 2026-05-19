@@ -1,4 +1,5 @@
 #include "TurnManager.hpp"
+
 #include "IAction.hpp"
 
 #include <memory>
@@ -6,8 +7,8 @@
 
 namespace sw
 {
-	TurnManager::TurnManager(GameContext& ctx)
-		: _ctx(ctx)
+	TurnManager::TurnManager(GameContext& ctx) :
+			_ctx(ctx)
 	{}
 
 	bool TurnManager::isFinished() const
@@ -24,12 +25,16 @@ namespace sw
 		for (auto& unit : _ctx.units.all())
 		{
 			if (!unit->isAlive())
+			{
 				continue;
+			}
 
 			if (auto action = unit->components.template get<IAction>())
 			{
 				if (action->canAct(*unit, _ctx))
+				{
 					return true;
+				}
 			}
 		}
 		return false;
@@ -41,7 +46,9 @@ namespace sw
 		{
 			// Check before the tick: if nobody can act, stop now.
 			if (!anyUnitCanAct())
+			{
 				break;
+			}
 
 			++_ctx.tick;
 
@@ -51,7 +58,9 @@ namespace sw
 			for (auto& unit : unitsCopy)
 			{
 				if (!unit->isAlive())
+				{
 					continue;
+				}
 
 				if (auto action = unit->components.template get<IAction>())
 				{

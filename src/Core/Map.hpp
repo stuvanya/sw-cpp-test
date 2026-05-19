@@ -23,8 +23,15 @@ namespace sw
 		// Returns all free neighboring cells (up to 8 directions).
 		std::vector<std::pair<uint32_t, uint32_t>> getFreeNeighbors(uint32_t x, uint32_t y) const;
 
-		uint32_t width() const { return _width; }
-		uint32_t height() const { return _height; }
+		uint32_t width() const
+		{
+			return _width;
+		}
+
+		uint32_t height() const
+		{
+			return _height;
+		}
 
 		// Chebyshev distance between two points.
 		static uint32_t distance(uint32_t ax, uint32_t ay, uint32_t bx, uint32_t by);
